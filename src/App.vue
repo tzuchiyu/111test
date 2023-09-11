@@ -6,9 +6,9 @@ let id = 0;
 const newTodo = ref("");
 const hideCompleted = ref(false);
 const todos = ref([
-  { id: id++, text: "Learn HTML", done: true },
-  { id: id++, text: "Learn JavaScript", done: true },
-  { id: id++, text: "Learn Vue", done: false },
+  { id: id++, text: "test1", done: true },
+  { id: id++, text: "test2", done: true },
+  { id: id++, text: "test3", done: false },
 ]);
 
 const filteredTodos = computed(() => {
