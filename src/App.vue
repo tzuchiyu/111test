@@ -4,13 +4,12 @@ import { ref, computed } from "vue";
 let id = 0;
 
 const newTodo = ref("");
+const newTodoTime = ref("");
 const hideCompleted = ref(false);
 const todos = ref([
-  { id: id++, text: "test1", done: true },
-  { id: id++, text: "test2", done: true },
-  { id: id++, text: "test3", done: false },
-  { id: id++, text: "test4", done: false },
-  { id: id++, text: "test5", done: false },
+  { id: id++, text: "時間 : 10:00 事項 : test1", done: true },
+  { id: id++, text: "時間 : 11:00 事項 : test2", done: true },
+  { id: id++, text: "時間 : 15:00 事項 : test3", done: false },
 ]);
 
 const filteredTodos = computed(() => {
@@ -18,8 +17,13 @@ const filteredTodos = computed(() => {
 });
 
 function addTodo() {
-  todos.value.push({ id: id++, text: newTodo.value, done: false });
+  todos.value.push({
+    id: id++,
+    text: `時間 : ${newTodoTime.value} 事項 : ${newTodo.value}`,
+    done: false,
+  });
   newTodo.value = "";
+  newTodoTime.value = "";
 }
 
 function removeTodo(todo) {
@@ -29,7 +33,11 @@ function removeTodo(todo) {
 
 <template>
   <form @submit.prevent="addTodo">
-    <input v-model="newTodo" />
+    <label>時間 : </label>
+    <input v-model="newTodoTime" placeholder="請輸入代辦時間" />
+    <br />
+    <label>事項 : </label>
+    <input v-model="newTodo" placeholder="請輸入代辦事項" />
     <button
       style="
         background-color: coral;
