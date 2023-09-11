@@ -9,6 +9,8 @@ const todos = ref([
   { id: id++, text: "test1", done: true },
   { id: id++, text: "test2", done: true },
   { id: id++, text: "test3", done: false },
+  { id: id++, text: "test4", done: false },
+  { id: id++, text: "test5", done: false },
 ]);
 
 const filteredTodos = computed(() => {
@@ -28,17 +30,47 @@ function removeTodo(todo) {
 <template>
   <form @submit.prevent="addTodo">
     <input v-model="newTodo" />
-    <button>Add Todo</button>
+    <button
+      style="
+        background-color: coral;
+        color: white;
+        border: none;
+        padding: 2px 5px;
+        margin-left: 5px;
+      "
+    >
+      新增
+    </button>
   </form>
   <ul>
     <li v-for="todo in filteredTodos" :key="todo.id">
       <input type="checkbox" v-model="todo.done" />
       <span :class="{ done: todo.done }">{{ todo.text }}</span>
-      <button @click="removeTodo(todo)">X</button>
+      <button
+        style="
+          background-color: blueviolet;
+          color: white;
+          border: none;
+          padding: 1px 3px;
+          margin-left: 5px;
+          cursor: pointer;
+        "
+        @click="removeTodo(todo)"
+      >
+        X
+      </button>
     </li>
   </ul>
-  <button @click="hideCompleted = !hideCompleted">
-    {{ hideCompleted ? "Show all" : "Hide completed" }}
+  <button
+    style="
+      background-color: coral;
+      color: white;
+      border: none;
+      padding: 5px 2px;
+    "
+    @click="hideCompleted = !hideCompleted"
+  >
+    {{ hideCompleted ? "顯示全部" : "隱藏已完成" }}
   </button>
 </template>
 
