@@ -142,7 +142,7 @@ getStorage();
           </h3>
         </div>
         <div v-else>
-          <h3>收藏清單</h3>
+          <h3 style="margin-top:-50px">收藏清單</h3>
           <br />
           <div
             v-for="item in storage"
@@ -173,14 +173,11 @@ getStorage();
 </template>
 
 <style>
-.container {
-  width: 1200px;
-}
+/* .container { */
+  /* width: 1200px; */
+/* } */
 .title {
   text-align: center;
-  position: fixed;
-  width: 77%;
-  z-index: 10;
   background-color: beige;
   padding: 10px;
 }
@@ -196,22 +193,22 @@ getStorage();
 .main {
   display: flex;
   justify-content: center;
-  margin-top: 150px;
+  margin-top: 80px;
 }
 .movie {
+  width:100%;
   background-color: white;
   display: flex;
   justify-content: center;
-  width: 60%;
-  gap: 100px;
+  gap: 80px;
 }
 .poster {
   width: 30%;
   top: -40px;
-  left: 50px;
+  left: 30px;
 }
 .poster > img {
-  width: 180px;
+  width: 150px;
   box-shadow: 5px 15px 15px gray;
 }
 .content {
