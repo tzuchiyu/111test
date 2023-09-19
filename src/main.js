@@ -1,6 +1,6 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from "vue";
+import Todolist from "./pages/Todolist.vue";
+import MovieList from "./pages/MovieList.vue";
+import "./assets/main.css";
 
-import './assets/main.css'
-
-createApp(App).mount('#app')
+createApp(MovieList).mount("#app");
