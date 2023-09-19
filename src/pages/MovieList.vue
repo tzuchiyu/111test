@@ -21,14 +21,10 @@ const searchMoviesApi = async () => {
     // console.log(res);
     if (res.data.Poster !== "N/A") {
       poster.value = res.data.Poster;
-    } else {
-      poster.value =
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
-    }
-    // console.log(res.data.Title);
-    if (res.data.Title !== undefined) {
       title.value = res.data.Title;
     } else {
+      poster.value =
+"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
       title.value = "Movie not found!";
     }
     ratings.value = res.data.Ratings[0].Value.split("/")[0];
@@ -134,7 +130,7 @@ getStorage();
         </div>
       </div>
       <div v-else class="main-2">
-        <div v-if="storage.length < 0">
+        <div v-if="storage.length <= 0">
           <h3>Your movie list is empty lets try to fill it up...</h3>
           <h3>
             Write your favorite movie name then click the add button and magic
@@ -178,8 +174,6 @@ getStorage();
 /* } */
 .title {
   text-align: center;
-  background-color: beige;
-  padding: 10px;
 }
 .title > h1 {
   font-weight: bold;
@@ -196,7 +190,6 @@ getStorage();
   margin-top: 80px;
 }
 .movie {
-  width:100%;
   background-color: white;
   display: flex;
   justify-content: center;
