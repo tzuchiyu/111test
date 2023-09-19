@@ -56,7 +56,7 @@ function removeTodo(todo) {
       <span :class="{ done: todo.done }">{{ todo.text }}</span>
       <button
         style="
-          background-color: blueviolet;
+          background-color: black;
           color: white;
           border: none;
           padding: 1px 3px;
@@ -65,7 +65,7 @@ function removeTodo(todo) {
         "
         @click="removeTodo(todo)"
       >
-        X
+        刪除
       </button>
     </li>
   </ul>
