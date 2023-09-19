@@ -1,37 +1,37 @@
-<script setup>
-import { ref, computed } from "vue";
+<script setup lang="ts">
+import { computed } from "vue";
+import { useAppStore } from "@/store/modules/app";
+import { ConfigGlobal } from "@/components/ConfigGlobal";
+import { isDark } from "@/utils/is";
+import { useDesign } from "@/hooks/web/useDesign";
+import { useStorage } from "@/hooks/web/useStorage";
 
-let id = 0;
+const { getPrefixCls } = useDesign();
 
-const newTodo = ref("");
-const newTodoTime = ref("");
-const hideCompleted = ref(false);
-const todos = ref([
-  { id: id++, text: "時間 : 10:00 事項 : test1", done: true },
-  { id: id++, text: "時間 : 11:00 事項 : test2", done: true },
-  { id: id++, text: "時間 : 15:00 事項 : test3", done: false },
-]);
+const prefixCls = getPrefixCls("app");
 
-const filteredTodos = computed(() => {
-  return hideCompleted.value ? todos.value.filter((t) => !t.done) : todos.value;
-});
+const appStore = useAppStore();
 
-function addTodo() {
-  todos.value.push({
-    id: id++,
-    text: `時間 : ${newTodoTime.value} 事項 : ${newTodo.value}`,
-    done: false,
-  });
-  newTodo.value = "";
-  newTodoTime.value = "";
-}
+const currentSize = computed(() => appStore.getCurrentSize);
 
-function removeTodo(todo) {
-  todos.value = todos.value.filter((t) => t !== todo);
-}
+const greyMode = computed(() => appStore.getGreyMode);
+
+const { getStorage } = useStorage();
+
+const setDefaultTheme = () => {
+  if (getStorage("isDark") !== null) {
+    appStore.setIsDark(getStorage("isDark"));
+    return;
+  }
+  const isDarkTheme = isDark();
+  appStore.setIsDark(isDarkTheme);
+};
+
+setDefaultTheme();
 </script>
 
 <template>
+<<<<<<< HEAD
   <form @submit.prevent="addTodo">
     <label>時間 : </label>
     <input v-model="newTodoTime" placeholder="請輸入代辦時間" />
@@ -80,10 +80,34 @@ function removeTodo(todo) {
   >
     {{ hideCompleted ? "顯示全部" : "隱藏已完成" }}
   </button>
+=======
+  <ConfigGlobal :size="currentSize">
+    <RouterView :class="greyMode ? `${prefixCls}-grey-mode` : ''" />
+  </ConfigGlobal>
+>>>>>>> b6b94c19a1c892a29cce3d76e1422710cdf5269c
 </template>
 
-<style>
-.done {
-  text-decoration: line-through;
+<style lang="less">
+@prefix-cls: ~"@{namespace}-app";
+
+.size {
+  width: 100%;
+  height: 100%;
+}
+
+html,
+body {
+  padding: 0 !important;
+  margin: 0;
+  // overflow: hidden;
+  .size;
+
+  #app {
+    .size;
+  }
+}
+
+.@{prefix-cls}-grey-mode {
+  filter: grayscale(100%);
 }
 </style>
