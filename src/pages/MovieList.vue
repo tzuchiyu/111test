@@ -3,35 +3,39 @@ import { ref } from "vue";
 import axios from "axios";
 const headTitle = ref(false);
 const inputText = ref("");
-const title = ref("");
-const poster = ref("");
-const ratings = ref("");
-const stars = ref([]);
+const content = ref({
+  title: "",
+  poster: "",
+  ratings: "",
+  stars: [],
+});
 const storage = ref([]);
 const removeData = ref("");
 const searchMoviesApi = async () => {
-  title.value = "";
-  poster.value = "";
-  ratings.value = "";
-  stars.value = [];
+  content.value = {
+    title: "",
+    poster: "",
+    ratings: "",
+    stars: [],
+  };
   try {
     const res = await axios.get(
       `https://www.omdbapi.com/?i=tt3896198&apikey=a5a02f05&t=${inputText.value}`
     );
     // console.log(res);
     if (res.data.Poster !== "N/A") {
-      poster.value = res.data.Poster;
-      title.value = res.data.Title;
+      content.value.poster = res.data.Poster;
+      content.value.title = res.data.Title;
     } else {
-      poster.value =
-"https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
-      title.value = "Movie not found!";
+      content.value.poster =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+      content.value.title = "Movie not found!";
     }
-    ratings.value = res.data.Ratings[0].Value.split("/")[0];
+    content.value.ratings = res.data.Ratings[0].Value.split("/")[0];
     // console.log(Math.round(ratings.value));
-    if (ratings !== "") {
-      for (let i = 0; i < Math.round(ratings.value); i++) {
-        stars.value.push(i);
+    if (content.value.ratings !== "") {
+      for (let i = 0; i < Math.round(content.value.ratings); i++) {
+        content.value.stars.push(i);
       }
       // console.log(stars.value);
     }
@@ -49,9 +53,9 @@ const searchMovies = () => {
 };
 const saveToStorage = () => {
   const newMovie = {
-    title: title.value,
-    poster: poster.value,
-    ratings: ratings.value,
+    title: content.value.title,
+    poster: content.value.poster,
+    ratings: content.value.ratings,
   };
   storage.value.push(newMovie);
   localStorage.setItem("movies", JSON.stringify(storage.value));
@@ -85,29 +89,36 @@ getStorage();
       <h1>
         {{ headTitle == true ? "ADD A MOVIE" : "Movie List" }}
       </h1>
-      <input
-        type="text"
-        placeholder="Movie Title"
-        @blur="searchMovies"
-        v-model="inputText"
-        @focus="clearInputText"
-      />
+      <input type="text" placeholder="Movie Title" v-model="inputText" />
+      <button
+        @click="searchMovies"
+        style="
+          padding: 9px 7px 7px 7px;
+          background-color: black;
+          color: white;
+          border: none;
+          margin-left: 5px;
+        "
+      >
+        search
+      </button>
     </div>
     <!-- 變更內容 -->
     <div class="main">
       <div
-        v-if="inputText !== '' && title !== 'Movie not found!'"
+        v-if="inputText !== '' && content.title !== 'Movie not found!'"
         class="movie"
       >
         <div class="poster">
-          <img :src="poster" />
+          <img :src="content.poster" />
         </div>
         <div class="content">
-          <h3>{{ title }}</h3>
+          <h3>{{ content.title }}</h3>
           <div class="stars">
-            <p>{{ ratings }}</p>
-            <div v-for="star in stars">
+            <p>{{ content.ratings }}</p>
+            <div v-for="(star, index) in content.stars">
               <svg
+                :key="index"
                 xmlns="http://www.w3.org/2000/svg"
                 height="1em"
                 viewBox="0 0 576 512"
@@ -121,15 +132,12 @@ getStorage();
           <button @click="saveToStorage" class="btn">Add to list</button>
         </div>
       </div>
-      <div
-        v-else-if="inputText !== '' && title == 'Movie not found!'"
-        class="movie"
-      >
+      <div v-else-if="inputText !== ''" class="movie">
         <div class="content">
-          <h3>{{ title }}</h3>
+          <h3>{{ content.value.title }}</h3>
         </div>
       </div>
-      <div v-else class="main-2">
+      <div v-else class="main-2 movie">
         <div v-if="storage.length <= 0">
           <h3>Your movie list is empty lets try to fill it up...</h3>
           <h3>
@@ -138,7 +146,7 @@ getStorage();
           </h3>
         </div>
         <div v-else>
-          <h3 style="margin-top:-50px">收藏清單</h3>
+          <h3 style="margin-top: -50px">收藏清單</h3>
           <br />
           <div
             v-for="item in storage"
@@ -169,9 +177,6 @@ getStorage();
 </template>
 
 <style>
-/* .container { */
-  /* width: 1200px; */
-/* } */
 .title {
   text-align: center;
 }
@@ -194,6 +199,7 @@ getStorage();
   display: flex;
   justify-content: center;
   gap: 80px;
+  width: 600px;
 }
 .poster {
   width: 30%;
