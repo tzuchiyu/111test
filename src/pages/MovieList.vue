@@ -22,26 +22,29 @@ const searchMoviesApi = async () => {
     const res = await axios.get(
       `https://www.omdbapi.com/?i=tt3896198&apikey=a5a02f05&t=${inputText.value}`
     );
-    // console.log(res);
-    if (res.data.Poster !== "N/A") {
+    console.log(res);
+    if (res.data.Poster && res.data.Title) {
       content.value.poster = res.data.Poster;
       content.value.title = res.data.Title;
+      console.log("有找到");
     } else {
       content.value.poster =
         "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
       content.value.title = "Movie not found!";
+      console.log("沒有找到");
     }
-    content.value.ratings = res.data.Ratings[0].Value.split("/")[0];
-    // console.log(Math.round(ratings.value));
-    if (content.value.ratings !== "") {
+    if (res.data.Rating !== undefined) {
+      content.value.ratings = res.data.Ratings[0].Value.split("/")[0];
+      console.log(content.value.ratings);
       for (let i = 0; i < Math.round(content.value.ratings); i++) {
         content.value.stars.push(i);
+        // console.log(stars.value);
       }
-      // console.log(stars.value);
     }
   } catch (err) {
     console.log(err);
   }
+  console.log(content.value);
 };
 const searchMovies = () => {
   if (inputText.value !== "") {
@@ -132,9 +135,12 @@ getStorage();
           <button @click="saveToStorage" class="btn">Add to list</button>
         </div>
       </div>
-      <div v-else-if="inputText !== ''" class="movie">
+      <div
+        v-else-if="inputText !== '' && content.title == 'Movie not found!'"
+        class="movie"
+      >
         <div class="content">
-          <h3>{{ content.value.title }}</h3>
+          <h3>{{ content.title }}</h3>
         </div>
       </div>
       <div v-else class="main-2 movie">
